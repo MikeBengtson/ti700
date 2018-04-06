@@ -1,6 +1,14 @@
 var TwitterPackage = require("twitter");
-var secret = require("./secret");
 var fs = require('fs');
+
+var secret = require("./secret");
+// File format is:
+// {
+//     "consumer_key": "{value}",
+//     "consumer_secret": "{value}",
+//     "access_token_key": "{value}",
+//     "access_token_secret": "{value}"
+// }
 
 var Twitter = new TwitterPackage(secret);
 
@@ -33,7 +41,7 @@ var publicActions = [
     {
         action: "#print",
         handler: function(tweet) {
-            ttyStream.write(getTweetParam(tweet, this.action) + newline);
+            ttyStream.write(tweet.user.screen_name + ": " + getTweetParam(tweet, this.action) + newline + 1);
             state.tweets++;
             return "";
         }
@@ -63,6 +71,7 @@ var publicActions = [
     }
 ];
 
+// Unused for now, need to be whitelisted for DM functions
 var messageActions = [
     {
         action: "start",
@@ -135,7 +144,7 @@ ttyStream.once('open', function() {
         });
     });
 
-// Monitor user stream
+    // Unused for now, need to be whitelisted for DM functions
     Twitter.stream("user", function(stream) {
         console.log("Monitoring 'user'");
 
